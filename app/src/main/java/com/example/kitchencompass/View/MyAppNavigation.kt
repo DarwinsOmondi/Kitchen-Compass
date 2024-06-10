@@ -10,10 +10,17 @@ fun AppNavigation() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "foodHomePage") {
         composable("foodHomePage") {
-            FoodHomePage { navController.navigate("description") }
+            FoodHomePage {
+                navController.navigate("description")}
+            navController.navigate("search")
         }
         composable("description") {
             Description { navController.popBackStack() }
+        }
+        composable("searchPage"){
+                SearchPageView {
+                navController.navigate("searchPage")
+            }
         }
     }
 }

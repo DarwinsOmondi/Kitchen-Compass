@@ -26,4 +26,15 @@ object RetrofitClient {
     val Random_API: ApiService by lazy {
         random_retrofit.create(ApiService::class.java)
     }
+
+    private const val firstLetter_Food_BASEURL:String = "https://www.themealdb.com/api/json/v1/1/"
+    val FirstLetter_Food_Api:Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(firstLetter_Food_BASEURL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+    val searchFoodApi:ApiService by lazy {
+        FirstLetter_Food_Api.create(ApiService::class.java)
+    }
 }

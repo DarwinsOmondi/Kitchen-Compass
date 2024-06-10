@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,11 +27,15 @@ import coil.compose.AsyncImage
 import com.example.kitchencompass.Model.Category
 import com.example.kitchencompass.Model.Meal
 import com.example.kitchencompass.ViewModel.FoodViewModel
+import com.example.kitchencompass.ViewModel.SearchViewModel
 
 
 @Composable
 fun FoodHomePage(navigateToSecondScreen: () -> Unit) {
     val foodViewModel: FoodViewModel = viewModel()
+    val searchViewModel: SearchViewModel = viewModel()
+    val searchFoodData = searchViewModel.searchFoodData.observeAsState()
+
     val foodList = foodViewModel.foodData.observeAsState()
     val randomFoodList = foodViewModel.randomFoodData.observeAsState()
 
@@ -37,7 +43,7 @@ fun FoodHomePage(navigateToSecondScreen: () -> Unit) {
         .fillMaxSize()
         .padding(16.dp)
     ) {
-        if (foodList.value != null && randomFoodList.value != null) {
+        if (foodList.value != null && randomFoodList.value != null || searchFoodData.value != null) {
             FoodDetails(foods = foodList.value!!, meals = randomFoodList.value!!, navigateToSecondScreen)
         } else {
             Column(
@@ -54,6 +60,9 @@ fun FoodHomePage(navigateToSecondScreen: () -> Unit) {
 
 @Composable
 fun FoodDetails(foods: List<Category>, meals: List<Meal>, navigateToSecondScreen: () -> Unit) {
+    var searchedName by remember {
+        mutableStateOf("")
+    }
     Column(modifier = Modifier.fillMaxSize()) {
         Spacer(modifier = Modifier.height(50.dp))
         Text(
@@ -65,6 +74,17 @@ fun FoodDetails(foods: List<Category>, meals: List<Meal>, navigateToSecondScreen
                 fontWeight = FontWeight.Bold
             )
         )
+        Spacer(modifier = Modifier.height(20.dp))
+        Row (modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)){
+            OutlinedTextField(value = searchedName, onValueChange = {
+            })
+            IconButton(onClick = {  }) {
+                Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
+            }
+
+        }
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Food Categories",
